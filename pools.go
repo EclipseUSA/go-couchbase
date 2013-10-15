@@ -225,7 +225,7 @@ func (b *Bucket) refresh() (err error) {
 	for i := range b.connections {
 		b.connections[i] = newConnectionPool(
 			b.VBucketServerMap.ServerList[i],
-			b.authHandler(), 8)
+			b.authHandler(), 48)
 	}
 	return nil
 }
