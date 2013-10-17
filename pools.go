@@ -279,6 +279,17 @@ func (b *Bucket) Close() {
 	}
 }
 
+func (b *Bucket) Reset() {
+	if b.connections != nil {
+		for _, c := range b.connections {
+			if c != nil {
+				c.Reset()
+			}
+		}
+	}
+}
+
+
 func bucket_finalizer(b *Bucket) {
 	if b.connections != nil {
 		log.Printf("Warning: Finalizing a bucket with active connections.")
