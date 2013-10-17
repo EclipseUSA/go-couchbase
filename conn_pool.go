@@ -55,10 +55,14 @@ func (cp *connectionPool) Close() (err error) {
 	return
 }
 
-func (cp *connectionPool) Reset() (err error) {
+func (cp *connectionPool) Reload() (err error) {
 	defer func() { err, _ = recover().(error) }()
-	for c := range cp.connections {
-		c.Close()
+	conLen := len(cp.connections)
+	for i:=0; i < conLen; i++ {
+		if len(cp.connections) > 0 {
+			c := <- cp
+			c.Close()
+		}
 	}
 	return
 }
