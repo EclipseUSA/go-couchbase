@@ -55,6 +55,14 @@ func (cp *connectionPool) Close() (err error) {
 	return
 }
 
+func (cp *connectionPool) Reset() (err error) {
+	defer func() { err, _ = recover().(error) }()
+	for c := range cp.connections {
+		c.Close()
+	}
+	return
+}
+
 func (cp *connectionPool) GetWithTimeout(d time.Duration) (*memcached.Client, error) {
 	if cp == nil {
 		return nil, errors.New("no pool")
