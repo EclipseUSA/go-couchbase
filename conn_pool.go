@@ -55,7 +55,7 @@ func (cp *connectionPool) Close() (err error) {
 	return
 }
 
-func (cp *connectionPool) Reload() (err error) {
+func (cp *connectionPool) Reset() (err error) {
 	defer func() { err, _ = recover().(error) }()
 	conLen := len(cp.connections)
 	for i:=0; i < conLen; i++ {
