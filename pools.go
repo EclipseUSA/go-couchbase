@@ -225,7 +225,7 @@ func (b *Bucket) refresh() (err error) {
 	for i := range b.connections {
 		b.connections[i] = newConnectionPool(
 			b.VBucketServerMap.ServerList[i],
-			b.authHandler(), 48)
+			b.authHandler(), 4)
 	}
 	return nil
 }
@@ -280,15 +280,18 @@ func (b *Bucket) Close() {
 }
 
 func (b *Bucket) Reset() {
-	if b.connections != nil {
-		for _, c := range b.connections {
-			if c != nil {
-				c.Reset()
+
+	b.refresh()
+	/*
+		if b.connections != nil {
+			for _, c := range b.connections {
+				if c != nil {
+					c.Reset()
+				}
 			}
 		}
-	}
+	*/
 }
-
 
 func bucket_finalizer(b *Bucket) {
 	if b.connections != nil {

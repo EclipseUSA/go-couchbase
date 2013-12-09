@@ -2,9 +2,9 @@ package couchbase
 
 import (
 	"errors"
-	"time"
-
 	"github.com/dustin/gomemcached/client"
+	"log"
+	"time"
 )
 
 var TimeoutError = errors.New("timeout waiting to build connection")
@@ -58,9 +58,11 @@ func (cp *connectionPool) Close() (err error) {
 func (cp *connectionPool) Reset() (err error) {
 	defer func() { err, _ = recover().(error) }()
 	conLen := len(cp.connections)
-	for i:=0; i < conLen; i++ {
+	for i := 0; i < conLen; i++ {
+		log.Printf("in loop %v", i)
 		if len(cp.connections) > 0 {
-			c := <- cp
+			c := <-cp.connections
+			log.Printf("conn %v", c)
 			c.Close()
 		}
 	}
